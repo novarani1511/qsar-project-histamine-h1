@@ -1,0 +1,74 @@
+# Rencana Implementasi: Studi QSAR dan Pemodelan Molekuler pada Antagonis Reseptor Histamin H1
+
+Dokumen ini menguraikan langkah-langkah komprehensif untuk merancang dan mengeksekusi studi *Quantitative Structure-Activity Relationship* (QSAR) dan Pemodelan Molekuler (Molecular Docking) untuk senyawa antagonis reseptor Histamin H1.
+
+## User Review Required
+
+> [!IMPORTANT]
+> Mohon tinjau rencana implementasi ini. Beberapa aspek yang memerlukan konfirmasi Anda:
+> 1. **Sumber Data:** Apakah Anda sudah memiliki dataset senyawa beserta nilai aktivitasnya (misalnya IC50 atau Ki), atau apakah kita perlu mengekstraknya dari database publik (misal: ChEMBL, PubChem)?
+> 2. **Perangkat Lunak (Software):** Apakah ada preferensi *software* tertentu yang ingin Anda gunakan (misalnya, RDKit/Python, PaDEL-Descriptor, AutoDock Vina, MOE, Discovery Studio, dll)?
+
+## Open Questions
+
+> [!NOTE]
+> - Apakah target output dari studi ini berupa publikasi jurnal, tugas akhir/tesis, atau penemuan senyawa *lead* baru?
+> - Apakah ada metode *machine learning* spesifik yang ingin difokuskan (misalnya Multiple Linear Regression (MLR), Random Forest, SVM, atau Neural Networks)?
+
+---
+
+## Rencana Tahapan Eksekusi
+
+### 1. Pengumpulan dan Kurasi Data (Data Collection & Curation)
+Tahap ini bertujuan untuk menyiapkan dataset berkualitas tinggi untuk pemodelan QSAR.
+- **Pengumpulan Struktur dan Aktivitas:** Mengumpulkan senyawa-senyawa yang diketahui memiliki aktivitas antagonis terhadap reseptor Histamin H1. Aktivitas biologi (seperti $IC_{50}$ atau $K_i$) akan diubah ke dalam bentuk logaritmik ($pIC_{50}$ atau $pK_i$) agar memiliki korelasi linier.
+- **Pembersihan Data (Data Cleaning):** Menghapus duplikat, menghilangkan garam (*desalting*), menstandarkan tautomer, dan memastikan stereokimia sudah benar.
+
+### 2. Pemodelan Molekuler & Optimasi Geometri (Geometry Optimization)
+Struktur molekul harus berada pada konformasi energi terendahnya.
+- **Konversi 2D ke 3D:** Mengubah struktur senyawa dari 2D (misal: format SMILES) menjadi 3D.
+- **Minimisasi Energi:** Melakukan optimasi geometri menggunakan metode Mekanika Molekuler (misalnya MMFF94) atau Mekanika Kuantum (misalnya AM1/PM3 atau DFT).
+
+### 3. Perhitungan Deskriptor Molekuler (Descriptor Calculation)
+Mengekstraksi fitur numerik dari struktur kimia.
+- Menghitung deskriptor 1D, 2D, dan 3D (seperti deskriptor topologi, elektronik, termodinamika, konstitusional, dll). Perangkat lunak yang dapat digunakan antara lain RDKit, PaDEL-Descriptor, atau AlvaDesc.
+
+### 4. Pembagian Data dan Seleksi Fitur (Data Splitting & Feature Selection)
+Mengurangi dimensi data dan menyiapkan data untuk pelatihan.
+- **Data Splitting:** Membagi dataset menjadi *Training Set* (untuk membuat model, misal 80%) dan *Test Set* (untuk memvalidasi model, misal 20%). Algoritma *Kennard-Stone* atau pembagian acak berskala dapat digunakan.
+- **Feature Selection:** Membuang deskriptor dengan nilai konstan/mendekati konstan, menghilangkan deskriptor yang saling berkorelasi tinggi, dan memilih set deskriptor terbaik (misalnya menggunakan *Genetic Algorithm* (GA), *Stepwise Regression*, atau LASSO).
+
+### 5. Pengembangan Model QSAR (Model Development)
+Membangun hubungan matematis antara struktur (deskriptor) dan aktivitas biologi.
+- Menggunakan algoritma pemodelan seperti:
+  - *Multiple Linear Regression* (MLR)
+  - *Partial Least Squares* (PLS)
+  - *Support Vector Regression* (SVR)
+  - *Random Forest* (RF) atau *Artificial Neural Networks* (ANN)
+
+### 6. Validasi Model dan Domain Aplikabilitas
+Memastikan bahwa model bersifat prediktif dan tidak hanya menghafal data (overfitting).
+- **Validasi Internal:** Melakukan *Cross-Validation* (misalnya Leave-One-Out / LOO-CV) untuk mendapatkan nilai $Q^2$ dan $R^2$.
+- **Validasi Eksternal:** Menguji model pada *Test Set* untuk mendapatkan $R^2_{pred}$.
+- **Uji Y-Randomization:** Mengacak nilai aktivitas untuk memastikan model tidak terbentuk karena kebetulan (*chance correlation*).
+- **Domain Aplikabilitas (Applicability Domain - AD):** Menentukan batasan struktural di mana model dapat melakukan prediksi dengan akurat (misalnya menggunakan *Williams Plot*).
+
+### 7. Studi Molecular Docking (Pemodelan Molekuler Lanjutan)
+Mengetahui interaksi senyawa dengan reseptor pada tingkat atomik.
+- **Preparasi Reseptor:** Mengunduh struktur kristal 3D reseptor Histamin H1 dari Protein Data Bank (PDB ID: `3RZE` adalah struktur kristal H1 receptor dengan doxepin). Membuang ligan bawaan, molekul air, dan menambahkan atom hidrogen serta muatan.
+- **Preparasi Ligan:** Menyiapkan senyawa paling aktif, paling tidak aktif, dan senyawa referensi.
+- **Proses Docking:** Melakukan *docking* (misalnya menggunakan AutoDock Vina) pada *binding site* reseptor H1.
+- **Analisis Interaksi:** Mengidentifikasi interaksi ikatan hidrogen, interaksi hidrofobik, interaksi elektrostatik, dan *pi-pi stacking* antara ligan dan asam amino kunci (seperti Asp107, Trp428, Phe432, dll).
+
+### 8. Analisis Hasil dan Kesimpulan
+- Mengkorelasikan hasil persamaan QSAR dengan pengamatan visual dari *molecular docking*.
+- Mengidentifikasi gugus fungsi mana yang paling berkontribusi terhadap aktivitas.
+- Mendesain turunan senyawa baru (*lead optimization*) berdasarkan temuan QSAR dan Docking.
+
+---
+
+## Verification Plan
+
+### Verifikasi Manual
+- Anda akan meninjau dan menyetujui parameter yang akan digunakan (algoritma *machine learning*, *software docking*, dan *database* senyawa).
+- Setelah kita mulai, saya akan membantu Anda membuat skrip Python (menggunakan RDKit dan Scikit-Learn) untuk otomatisasi pengumpulan data, ekstraksi deskriptor, pembuatan model QSAR, serta visualisasi plot validasi.

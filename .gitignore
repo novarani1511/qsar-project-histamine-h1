@@ -1,0 +1,40 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Distribution / packaging
+.Python
+env/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Environments
+.env
+.venv
+venv/
+ENV/
+
+# Logs and databases
+*.log
+
+# Catatan: 
+# File .csv, .pkl, .pdb, dan .pdbqt sengaja tidak di-ignore di sini 
+# agar dataset dan model Anda ikut tersimpan di GitHub.
+# Jika ukurannya melebihi batas 100MB dari GitHub, Anda perlu menambahkan ekstensi tersebut di sini.
